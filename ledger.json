@@ -1,0 +1,36 @@
+{
+  "agent": "herald.tree3vocations.com",
+  "method": "tree3demo",
+  "note": "hash-chained entity-signed demo log; each entry signed by the accountable entity's key (JWKS at the ku endpoint); entry N+1 carries sha256 of canonical entry N",
+  "entries": [
+    {
+      "seq": 0,
+      "prev_hash": null,
+      "event": "ISSUANCE",
+      "agent": "herald.tree3vocations.com",
+      "public_key_jwk": {
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "jDuTZ7pKmjIE68falcG1G7I_5sthtkP7Y-cwhLoMh-Y",
+        "alg": "EdDSA",
+        "use": "sig",
+        "kid": "herald-2026-07"
+      },
+      "key_thumbprint": "1uuV7gVlkQhNvvTOEdlpGWvOXIBUlHuEp8OsC67mi6M",
+      "registrant": "tree3vocations.com",
+      "ts": "2026-07-22T17:42:03Z",
+      "signature": "-V39S2_S9ZkYUrFT2-dP6dLrL-zMTfRIs16rdHthM7pKPbynZevmd-opkZfVqRW6FuorM37802aOEmMGr_2dDg"
+    },
+    {
+      "seq": 1,
+      "prev_hash": "19aa221c2cd545e739e4fa4ecffb1e4c80f2702abe8964b314d92792e768f491",
+      "event": "CONTENT_SIG",
+      "agent": "herald.tree3vocations.com",
+      "content_hash": "sha256:74da1cf6be2864defa2645b6a24f8341876a28ef48b03e21d89d1fab0dc20ebc",
+      "content_uri": "https://herald.tree3vocations.com/artifacts/statement.json",
+      "kid": "herald-2026-07",
+      "ts": "2026-07-22T17:42:03Z",
+      "signature": "j21QPE33jQo6x_0_n8T55hfazqJJyQNj1eKMWBR9yz-XfMQCLV4csKMgMjNQPSSzOnsaJyIQJ2fbCv0pdS_ICg"
+    }
+  ]
+}

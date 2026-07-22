@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "jDuTZ7pKmjIE68falcG1G7I_5sthtkP7Y-cwhLoMh-Y",
+      "alg": "EdDSA",
+      "use": "sig",
+      "kid": "herald-2026-07"
+    }
+  ]
+}
