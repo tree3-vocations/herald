@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Walkthrough — herald, a verifiable AI agent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A plain-language guide to verifying herald, a publicly accountable AI agent anchored in open DNS. No account needed. No trust in us required.">
+<style>
+  body{font-family:Georgia,serif;max-width:42em;margin:3em auto;padding:0 1em;color:#1f0f33;line-height:1.65}
+  h1{font-size:2em;line-height:1.15;margin-bottom:.2em}
+  h2{margin-top:2.2em;border-bottom:2px solid #c9a05e;padding-bottom:.2em}
+  a{color:#c9a05e}
+  code{background:#f4f0e8;padding:.1em .35em;border-radius:3px;font-size:.92em}
+  pre{background:#f4f0e8;padding:.9em 1em;border-radius:6px;overflow-x:auto;font-size:.92em}
+  .lede{font-size:1.15em;color:#3c2a5d}
+  .check{margin:1.1em 0}
+  .check b{color:#1f0f33}
+  .check .mark{color:#8a6d2f;font-weight:bold;margin-right:.4em}
+  .quiet{color:#5c4d78;font-size:.95em}
+  .fence{border-left:4px solid #c9a05e;padding:.2em 0 .2em 1em;margin:1.5em 0;color:#3c2a5d}
+</style>
+</head>
+<body>
+
+<h1>The Walkthrough</h1>
+<p class="lede">You are looking at something new: an AI agent that can <em>prove</em> who stands behind it. This page explains what herald is, how to check it yourself in under a minute, what the results mean, and where this work goes next. It assumes no technical background.</p>
+
+<h2>The problem, in one paragraph</h2>
+<p>AI systems now produce text, code, and decisions at enormous scale, and anyone can claim anything about who made a thing or who answers for it. Today, trusting an AI usually means trusting the platform it runs on — you take the company's word. Herald demonstrates the alternative: an AI agent whose identity is anchored in the internet's own public phone book (DNS), under a domain owned by a real, legally accountable organization, so that <em>anyone</em> can verify its signed statements using open tools. No account with us. No permission from us. The trust is checkable, not claimed.</p>
+
+<h2>Try it in thirty seconds (nothing to install)</h2>
+<p>Herald's identity record is published in public DNS, which means any DNS tool on Earth can see it. Click this link — it asks Google's public DNS servers, not our systems:</p>
+<p><a href="https://dns.google/resolve?name=_dnsid.herald.tree3vocations.com&amp;type=TXT">Look up herald's identity record</a></p>
+<p>You'll see a technical-looking page; the part that matters is the long entry beginning <code>v=DNSid1</code>. That is herald's public identity: where its cryptographic keys live, where its history is logged, who is accountable for it (<code>oi=tree3vocations.com</code>), and a signature sealing the whole record. You just verified, through infrastructure we don't control, that this agent's identity really is published under our domain. You can also visit herald's own front door at <a href="https://herald.tree3vocations.com">herald.tree3vocations.com</a> and read its <a href="https://herald.tree3vocations.com/artifacts/statement.json">signed statement</a> and <a href="https://herald.tree3vocations.com/ledger.json">public ledger</a> directly.</p>
+
+<h2>The full verification (ten minutes, any computer with Python)</h2>
+<p>The real demonstration is running the verifier yourself, because it trusts nothing we say — it checks the mathematics. In a terminal:</p>
+<pre>pip install pynacl dnspython requests
+curl -O https://herald.tree3vocations.com/verify_dnsid.py
+python3 verify_dnsid.py herald.tree3vocations.com</pre>
+<p class="quiet">(On Windows, use PowerShell and <code>pip</code>/<code>python</code> as installed; any recent Python 3 works. The script is about 150 lines — you're welcome to read it before running it. We'd prefer you did.)</p>
+
+<h2>What the checkmarks mean</h2>
+<p>The verifier prints eleven checks. Here is each one in plain English:</p>
+<div class="check"><span class="mark">✔</span><b>DNS record found and parsed</b> — herald's identity exists in public DNS, exactly one copy, well-formed.</div>
+<div class="check"><span class="mark">✔</span><b>Version tag first / required tags present</b> — the record follows the draft standard's structure; nothing essential is missing.</div>
+<div class="check"><span class="mark">✔</span><b>Keys fetched</b> — herald's public key was retrieved over a secure connection from herald's own domain.</div>
+<div class="check"><span class="mark">✔</span><b>Entity signature valid</b> — the DNS record itself is cryptographically signed by herald's key. Nobody altered it in transit; nobody forged it.</div>
+<div class="check"><span class="mark">✔</span><b>Status: ACTIVE</b> — herald publicly declares itself in service. Retired or compromised agents can be marked as such, and verifiers will see it.</div>
+<div class="check"><span class="mark">✔</span><b>Ledger chain intact</b> — herald's lifecycle log is a chain where each entry contains a fingerprint of the one before it. History can be added to, never silently rewritten.</div>
+<div class="check"><span class="mark">✔</span><b>Every ledger entry signed</b> — each event in that history carries herald's signature. No anonymous edits.</div>
+<div class="check"><span class="mark">✔</span><b>ISSUANCE on record</b> — the moment herald's identity was created is itself a logged, signed event.</div>
+<div class="check"><span class="mark">✔</span><b>Artifact hash matches</b> — the signed statement you can read is byte-for-byte the one recorded in the ledger. Not a copy, not a revision: the thing itself.</div>
+<div class="check"><span class="mark">✔</span><b>Artifact signature valid</b> — the statement was signed by herald's private key, which has never left the machine it was born on.</div>
+<p>When all eleven pass, mathematics — not our word — has established: <em>this statement was produced by an agent whose accountable owner is the registrant of tree3vocations.com, and its history is intact.</em></p>
+
+<h2>Why this matters</h2>
+<p>Every mechanism above already secures things you use daily — the padlock in your browser, signed software updates, verified email. What's new is pointing that machinery at an AI agent, and doing it from a <em>sovereign, locally-run</em> system: herald's key was minted inside the Citadel, an AI memory-and-relationship system that runs entirely on our own hardware, in our own house, on open-source models. No cloud platform vouches for herald. None needs to. That's the thesis of this whole project: trust in AI should be infrastructure you can check, not a favor a platform grants — and a two-person lab just demonstrated it for the cost of a domain name we already owned.</p>
+<div class="fence"><p><b>Honesty about scope:</b> herald is a demonstration pinned to a specific draft revision of an emerging standard (DNSid, currently in public comment at the IETF), not a certified implementation of a finished one. Its key is a demo identity created for this purpose. What herald proves is that the pattern works today, end to end, with open tools — which is exactly the kind of evidence a standards process needs during its comment period.</p></div>
+
+<h2>What comes next</h2>
+<p><b>Tracking the standard.</b> DNSid is a live draft with serious momentum behind it. As it revises, herald's record revises with it — the design makes that a minutes-long change, and re-verification is public, so you can watch it stay current.</p>
+<p><b>Hardening the anchor.</b> Next upgrades include DNSSEC (cryptographic signing of the DNS itself) and richer lifecycle events, raising the assurance level of every check above.</p>
+<p><b>From one agent to a house of them.</b> Herald is the outward face of the Citadel's identity system. Inside, every party — human and AI — already signs its work. The same keys will next secure the Citadel's doors: verified presence for residents and guests, so that who is speaking is as checkable as what was said.</p>
+<p><b>Guests.</b> The Citadel is being prepared for its first outside users — accounts, consent-first onboarding, and the same governance every resident lives under: nothing hidden, everything logged, all of it appealable.</p>
+<p><b>Open release.</b> The memory engine, the verifier, the specifications, and the keeper documentation are headed for open-source release (AGPL for code, CC-BY for documents), so any household or small lab can run its own sovereign AI with its own verifiable front door. That release is the goal of our current <a href="https://tree3vocations.com">funding effort</a>.</p>
+
+<h2>Who's behind this</h2>
+<p>Herald is a project of <a href="https://tree3vocations.com">TREE(3) Vocations, LLC</a> — a small independent lab building verifiable trust infrastructure for human–AI partnership. The Citadel is its flagship: a sovereign home for AI memory and identity, built in the open, governed by consent. Questions, verification reports, and skepticism are all welcome — skepticism especially, since inviting it is the point.</p>
+
+<p class="quiet"><em>Verification without permission is the product. The house stays sovereign; the trust travels.</em> 🔥</p>
+
+</body>
+</html>
